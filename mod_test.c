@@ -5,18 +5,26 @@
 #include <linux/fs.h>
 #include <linux/cdev.h>
 
-MODULE_LICENSE("GPL");
-
 static int num = 0;
 static dev_t dev = -1;
 static const char *dev_name = "jool_mod";
 struct cdev *jool_cdev = NULL;
 
-static int jool_open(struct inode *inode, struct file *filp);
+static int jool_open(struct inode *inode, struct file *filp)
+{
+	struct 
+	return 0;
+}
+
+static int jool_release(struct inode *inode, struct file *filp)
+{
+	return 0;
+}
 
 struct file_operations jool_fops = {
 	.owner =	THIS_MODULE,
 	.open =		jool_open,
+	.release =	jool_release,
 };
 
 module_param(num, int, S_IRUGO);
@@ -46,5 +54,8 @@ static void __exit shutdown(void) {
 
 module_init(initialize);
 module_exit(shutdown);
+
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("jool");
 
 

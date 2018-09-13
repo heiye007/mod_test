@@ -12,7 +12,7 @@ struct cdev *jool_cdev = NULL;
 
 static int jool_open(struct inode *inode, struct file *filp)
 {
-	struct 
+//	struct 
 	return 0;
 }
 
@@ -31,17 +31,19 @@ module_param(num, int, S_IRUGO);
 
 static int __init initialize(void)
 {
+	int err;
 	if (alloc_chrdev_region(&dev, 0, 1, dev_name)) {
 		printk(KERN_ALERT "Failed alloc char device \"%s\" region!\n", dev_name);
 		return -1;
 	}
-	printk(KERN_WARNING "Successfully alloced char device \"%s\" region! %d", dev_name, MAJOR(dev));
-
-//	jool_cdev = cdev_alloc();
-//	jool_cdev->ops = jool_fops;
-
-//	cdev.owner = THIS_MODULE;
-
+	printk(KERN_ALERT "Successfully alloced char device \"%s\" region! %d", dev_name, MAJOR(dev));
+	jool_cdev = cdev_alloc();
+	jool_cdev->owner = THIS_MODULE;
+	jool_cdev->ops = &jool_fops;
+	err = cdev_add(jool_cdev, dev, 0);
+	if (err) {
+		printk(KERN_NOTICE "Error %d adding jool0", err);
+	}
 	return 0;
 }
 
